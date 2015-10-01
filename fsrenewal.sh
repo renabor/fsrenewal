@@ -1,22 +1,29 @@
 #!/bin/bash
-# Make sure only root can run our script
+# Make sure only root can run this script
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 1>&2
    exit 1
 fi
 
-if [[ "$DIR" == '/' || "$DIR" == '/etc' || "$DIR" == '/lib' ]]; then
-  echo "This script must not be used on $DIR" 
-  exit 1
+if [ $# -eq 0 ]
+  then
+    echo "Enter path that must be renewed"
+    exit 1
 fi
 
 DIR=$1
-cd $DIR
+cd "$DIR"
+CURPATH=`echo ${PWD}`
+if [[ "$CURPATH" == '/' || "$CURPATH" == '/etc' || "$CURPATH" == '/lib' ]]; then
+  echo "This script must not be used on $CURPATH" 
+  exit 1
+fi
 DIRPATH=`echo ${PWD}`/
 
 # save and change IFS 
 OLDIFS=$IFS
 IFS=$'\n'
+
  
 # read all directory file name into an array
 fileArray=($(find $DIRPATH -type d))
