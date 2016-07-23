@@ -5,6 +5,8 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+command -v md5sum >/dev/null 2>&1 || { echo >&2 "I require md5sum but it's not installed.  Aborting."; exit 1; }
+
 if [ $# -eq 0 ]
   then
     echo "Enter path that must be renewed"
@@ -47,8 +49,8 @@ echo "Entering directory ${fileArray[$i]}"
     # copy file preserving only mode, ownership in temporary place
     cp -a --no-preserve=timestamps "$j" "$TEMP" 
 
-    file1_md5=$(md5deep -q "$j")
-    file2_md5=$(md5deep -q "$TEMP$j")
+    file1_md5=$(md5sum -q "$j")
+    file2_md5=$(md5sum -q "$TEMP$j")
 
     if [ "${file1_md5}" == "${file2_md5}" ]; then
     
