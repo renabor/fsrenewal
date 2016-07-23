@@ -49,8 +49,8 @@ echo "Entering directory ${fileArray[$i]}"
     # copy file preserving only mode, ownership in temporary place
     cp -a --no-preserve=timestamps "$j" "$TEMP" 
 
-    file1_md5=$(md5sum -b "$j")
-    file2_md5=$(md5sum -b "$TEMP$j")
+    file1_md5=$(md5sum -b "$j"  | awk '{ print $1 }')
+    file2_md5=$(md5sum -b "$TEMP$j"  | awk '{ print $1 }')
 
     if [ "${file1_md5}" == "${file2_md5}" ]; then
     
